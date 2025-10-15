@@ -1,0 +1,48 @@
+# Create a main run file that we can edit & adjust to create any scenarios
+# Have one file that we can easily edit and change paramenters
+from Generators import DefaultGen, LineGen, GapLineGen, CircleGen
+import numpy as np
+
+if __name__ == "__main__":
+    # Define some parameters, we can add whatever else we think the generators may need.
+    tgt_id = 1426
+    jet_id = 4892
+
+    # We might even at some point pass it a list of different SAM equipment DBIDs, so we should account for that early.
+    sam_id = 543
+    num_scen = 15
+    seed = 4
+    num_sams=4
+    desired_radius=6
+
+    # key/value pairs that define the zone you want the scenarios or or ZONES so that we get a diverse set of scenarios in different region
+    # list contains the lat/lon bounds
+    zones = {
+        #africa
+        'zone_1' : [10,25,-10,30],
+        'zone_2' : [10,-20,20,30],
+        #asia
+        'zone_3' : [30,60,60,110],
+        'zone_4':[25,40,70,110],
+        #europe
+        'zone_5':[45,50,0,40],
+        #north america
+        'zone_6':[30,60,-110,-100],
+        'zone_7':[35,40,-110,-80],
+        'zone_8':[50,60,-120,-100],
+        #south america
+        'zone_9':[-10,0,-70,-60],
+        'zone_10':[-20,-10,-60,-50],
+        #australia
+        'zone_11':[-30,-20,130,140]
+        }
+
+    # initialize the class with params
+    #make_scenarios = DefaultGen(sam_id, jet_id, tgt_id, num_scen, zones, seed)
+    make_scenarios = LineGen(num_sams, sam_id, jet_id, tgt_id, num_scen, zones, seed)
+    #make_scenarios= GapLineGen(num_sams, sam_id, jet_id, tgt_id, num_scen, zones, seed)
+    #make_scenarios= CircleGen(num_sams, desired_radius, sam_id, jet_id, tgt_id, num_scen, zones, seed)
+
+    # One function call does it all, we are giving the class everything in needs within the constructor or atleast should
+    make_scenarios.clear_files_in_directories()
+    make_scenarios.generate_scenario()
